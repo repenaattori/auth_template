@@ -27,7 +27,10 @@ public class SecurityRestApi {
         @RequestParam String pw)
         {
             User u = secService.register(uname, pw);
-            return new ResponseEntity<>(u.username, HttpStatus.OK);
+
+            HttpHeaders headers =  new HttpHeaders();
+            headers.setContentType(MediaType.TEXT_PLAIN);
+            return new ResponseEntity<>(u.username, headers, HttpStatus.OK);
         }
 
     @PostMapping("login")
@@ -49,11 +52,14 @@ public class SecurityRestApi {
     @GetMapping("private")
     public ResponseEntity<String> getPrivateData(@RequestHeader("Authorization") String bearer){
 
+
         if(bearer.startsWith("Bearer")){
             String token = bearer.split(" ")[1];
             String username = secService.validateJwt(token);
             if(username!=null){
-                return new ResponseEntity<>("Private data for "+username, HttpStatus.OK);
+                HttpHeaders headers =  new HttpHeaders();
+                headers.setContentType(MediaType.TEXT_PLAIN);
+                return new ResponseEntity<>("Private data for "+username, headers, HttpStatus.OK);
             }
         }
 
@@ -77,6 +83,8 @@ public class SecurityRestApi {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
 
-            return new ResponseEntity<>(token, HttpStatus.OK);
+            HttpHeaders headers =  new HttpHeaders();
+            headers.setContentType(MediaType.TEXT_PLAIN);
+            return new ResponseEntity<>(token, headers, HttpStatus.OK);
         }
 }
