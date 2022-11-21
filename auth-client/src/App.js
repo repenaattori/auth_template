@@ -32,7 +32,8 @@ function App() {
     const config = {
       headers:{
         'Authorization': `Bearer ${localStorage.getItem('token')}`
-      }
+      },
+      withCredentials: true
     }
 
     axios.get('http://localhost:8080/private', config)
